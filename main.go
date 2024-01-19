@@ -42,4 +42,5 @@ func createStudent(context *gin.Context) {
 		"message": "Student was registered on the server.",
 		"student": student,
 	})
+	student.Save()
 }
