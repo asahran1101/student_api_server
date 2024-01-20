@@ -22,8 +22,9 @@ func GetStudentByRollNo(rollNo int64) (*models.Student, error) {
 	return nil, errors.New("Couldn't find the student with the mentioned roll number in the database.")
 }
 
-func Save(student models.Student) {
-	students = append(students, student)
+func Save(student *models.Student) {
+	student.RollNo = int64(len(students) + 1)
+	students = append(students, *student)
 }
 
 func Update(updatedStudent models.Student) error {

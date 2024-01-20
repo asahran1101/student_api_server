@@ -22,7 +22,7 @@ func CreateStudent(context *gin.Context) {
 	}
 
 	student.RollNo = 1
-	iointerface.Save(student)
+	iointerface.Save(&student)
 
 	context.JSON(http.StatusCreated, gin.H{
 		"message": "Student was registered on the server.",
@@ -50,6 +50,10 @@ func DeleteStudent(context *gin.Context) {
 
 		return
 	}
+
+	context.JSON(http.StatusAccepted, gin.H{
+		"message": "Student has been deleted.",
+	})
 }
 
 func GetStudent(context *gin.Context) {
@@ -113,4 +117,8 @@ func UpdateStudent(context *gin.Context) {
 
 		return
 	}
+
+	context.JSON(http.StatusAccepted, gin.H{
+		"message": "Student has been updated.",
+	})
 }
