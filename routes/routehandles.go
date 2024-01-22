@@ -4,10 +4,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"example.com/api/iointerface"
 	"example.com/api/models"
+	"example.com/api/studentinterface"
 	"github.com/gin-gonic/gin"
 )
+
+var studentClient studentinterface.StudentIOClient
 
 func CreateStudent(context *gin.Context) {
 	var student models.Student
@@ -22,7 +24,8 @@ func CreateStudent(context *gin.Context) {
 	}
 
 	student.RollNo = 1
-	iointerface.Save(&student)
+	//student = studentClient.Save(&student)
+	studentClient.Save(&student)
 
 	context.JSON(http.StatusCreated, gin.H{
 		"message": "Student was registered on the server.",
@@ -41,7 +44,7 @@ func DeleteStudent(context *gin.Context) {
 		return
 	}
 
-	err = iointerface.Delete(rollNo)
+	err = studentClient.Delete(rollNo)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -67,7 +70,7 @@ func GetStudent(context *gin.Context) {
 		return
 	}
 
-	student, err := iointerface.GetStudentByRollNo(rollNo)
+	student, err := studentClient.GetStudentByRollNo(rollNo)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -77,11 +80,14 @@ func GetStudent(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, student)
+	context.JSON(http.StatusOK, gin.H{
+		"message": "Fetched the student.",
+		"student": student,
+	})
 }
 
 func GetStudents(context *gin.Context) {
-	students := iointerface.GetAllStudents()
+	students := studentClient.GetAllStudents()
 	context.JSON(http.StatusOK, students)
 }
 
@@ -97,7 +103,6 @@ func UpdateStudent(context *gin.Context) {
 	}
 
 	var updatedStudent models.Student
-	updatedStudent.RollNo = rollNo
 	err = context.ShouldBindJSON(&updatedStudent)
 
 	if err != nil {
@@ -108,7 +113,8 @@ func UpdateStudent(context *gin.Context) {
 		return
 	}
 
-	err = iointerface.Update(updatedStudent)
+	updatedStudent.RollNo = rollNo
+	err = studentClient.Update(updatedStudent)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
