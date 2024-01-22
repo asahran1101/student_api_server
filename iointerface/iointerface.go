@@ -7,6 +7,7 @@ import (
 )
 
 var students = []models.Student{}
+var noOfStudents = 0
 
 func GetAllStudents() []models.Student {
 	return students
@@ -23,7 +24,8 @@ func GetStudentByRollNo(rollNo int64) (*models.Student, error) {
 }
 
 func Save(student *models.Student) {
-	student.RollNo = int64(len(students) + 1)
+	noOfStudents++
+	student.RollNo = int64(noOfStudents)
 	students = append(students, *student)
 }
 
