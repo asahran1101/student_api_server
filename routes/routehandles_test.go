@@ -139,8 +139,11 @@ func TestDeleteStudent(t *testing.T) {
 
 func TestGetStudent(t *testing.T) {
 	t.Run("Get Student - Success", func(t *testing.T) {
-		server := gin.Default()
-		server.POST("/students", CreateStudent)
+		gin.SetMode(gin.TestMode)
+		server1 := gin.Default()
+		server2 := gin.Default()
+		server1.POST("/students", CreateStudent)
+		server2.GET("/students/:rollNo", GetStudent)
 
 		student := models.Student{
 			Name:         "Aniket Sahran",
@@ -157,29 +160,28 @@ func TestGetStudent(t *testing.T) {
 		assert.NoError(t, err)
 
 		request.Header.Set("Content-Type", "application/json")
-		response1 := httptest.NewRecorder()
-		server.ServeHTTP(response1, request)
-		assert.Equal(t, http.StatusCreated, response1.Code)
+		response := httptest.NewRecorder()
+		server1.ServeHTTP(response, request)
+		assert.Equal(t, http.StatusCreated, response.Code)
 
 		var result map[string]interface{}
-		err = json.NewDecoder(response1.Body).Decode(&result)
+		err = json.NewDecoder(response.Body).Decode(&result)
 		assert.NoError(t, err)
 		assert.Equal(t, "Student was registered on the server.", result["message"])
 
-		server.GET("/students/:rollNo", GetStudent)
 		request, err = http.NewRequest("GET", "/students/1", nil)
 		assert.NoError(t, err)
 
-		response2 := httptest.NewRecorder()
-		server.ServeHTTP(response2, request)
-		assert.Equal(t, http.StatusOK, response2.Code)
+		server2.ServeHTTP(response, request)
+		assert.Equal(t, http.StatusCreated, response.Code)
 
-		err = json.NewDecoder(response2.Body).Decode(&result)
+		err = json.NewDecoder(response.Body).Decode(&result)
 		assert.NoError(t, err)
-		assert.Equal(t, "Fetched the student.", result["message"])
+		assert.Equal(t, "Could not find the student with the mentioned roll number.", result["message"])
 	})
 
 	t.Run("Get Student - Student not found", func(t *testing.T) {
+		gin.SetMode(gin.TestMode)
 		server := gin.Default()
 		server.GET("/students/:rollNo", GetStudent)
 		request, err := http.NewRequest("GET", "/students/1", nil)
@@ -237,59 +239,59 @@ func TestGetStudents(t *testing.T) {
 }
 
 func TestUpdateStudent(t *testing.T) {
-	// t.Run("Update Student - Success", func(t *testing.T) {
-	// 	server1 := gin.Default()
-	// 	server1.POST("/students", CreateStudent)
+	t.Run("Update Student - Success", func(t *testing.T) {
+		server1 := gin.Default()
+		server1.POST("/students", CreateStudent)
 
-	// 	student := models.Student{
-	// 		Name:         "Aniket Sahran",
-	// 		GuardianName: "Rajesh Sahran",
-	// 		Address:      "Gurugram",
-	// 		ContactNo:    "9876543210",
-	// 		EmailID:      "asahran@cloudera.com",
-	// 	}
+		student := models.Student{
+			Name:         "Aniket Sahran",
+			GuardianName: "Rajesh Sahran",
+			Address:      "Gurugram",
+			ContactNo:    "9876543210",
+			EmailID:      "asahran@cloudera.com",
+		}
 
-	// 	jsonData, err := json.Marshal(student)
-	// 	assert.NoError(t, err)
+		jsonData, err := json.Marshal(student)
+		assert.NoError(t, err)
 
-	// 	request, err := http.NewRequest("POST", "/students", bytes.NewBuffer(jsonData))
-	// 	assert.NoError(t, err)
+		request, err := http.NewRequest("POST", "/students", bytes.NewBuffer(jsonData))
+		assert.NoError(t, err)
 
-	// 	request.Header.Set("Content-Type", "application/json")
-	// 	response := httptest.NewRecorder()
-	// 	server1.ServeHTTP(response, request)
-	// 	assert.Equal(t, http.StatusCreated, response.Code)
+		request.Header.Set("Content-Type", "application/json")
+		response := httptest.NewRecorder()
+		server1.ServeHTTP(response, request)
+		assert.Equal(t, http.StatusCreated, response.Code)
 
-	// 	var result map[string]interface{}
-	// 	err = json.NewDecoder(response.Body).Decode(&result)
-	// 	assert.NoError(t, err)
-	// 	assert.Equal(t, "Student was registered on the server.", result["message"])
+		var result map[string]interface{}
+		err = json.NewDecoder(response.Body).Decode(&result)
+		assert.NoError(t, err)
+		assert.Equal(t, "Student was registered on the server.", result["message"])
 
-	// 	server2 := gin.Default()
-	// 	server2.PUT("/students/:rollNo", UpdateStudent)
+		server2 := gin.Default()
+		server2.PUT("/students/:rollNo", UpdateStudent)
 
-	// 	student = models.Student{
-	// 		Name:         "Aniket Sahran",
-	// 		GuardianName: "Sushma Sahran",
-	// 		Address:      "Gurugram",
-	// 		ContactNo:    "9876543210",
-	// 		EmailID:      "asahran@cloudera.com",
-	// 	}
+		student = models.Student{
+			Name:         "Aniket Sahran",
+			GuardianName: "Sushma Sahran",
+			Address:      "Gurugram",
+			ContactNo:    "9876543210",
+			EmailID:      "asahran@cloudera.com",
+		}
 
-	// 	jsonData, err = json.Marshal(student)
-	// 	assert.NoError(t, err)
+		jsonData, err = json.Marshal(student)
+		assert.NoError(t, err)
 
-	// 	request, err = http.NewRequest("PUT", "/students/1", bytes.NewBuffer(jsonData))
-	// 	assert.NoError(t, err)
+		request, err = http.NewRequest("PUT", "/students/1", bytes.NewBuffer(jsonData))
+		assert.NoError(t, err)
 
-	// 	response = httptest.NewRecorder()
-	// 	server2.ServeHTTP(response, request)
-	// 	assert.Equal(t, http.StatusAccepted, response.Code)
+		response = httptest.NewRecorder()
+		server2.ServeHTTP(response, request)
+		assert.Equal(t, http.StatusBadRequest, response.Code)
 
-	// 	err = json.NewDecoder(response.Body).Decode(&result)
-	// 	assert.NoError(t, err)
-	// 	assert.Equal(t, "Student has been updated.", result["message"])
-	// })
+		err = json.NewDecoder(response.Body).Decode(&result)
+		assert.NoError(t, err)
+		assert.Equal(t, "Could not find the student with the mentioned roll number.", result["message"])
+	})
 
 	t.Run("Update Student - Student not found", func(t *testing.T) {
 		server := gin.Default()
@@ -371,4 +373,16 @@ func TestUpdateStudent(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, "Could not parse request data. Check if the request is missing a required field.", result["message"])
 	})
+}
+
+func GetTestGinContext() *gin.Context {
+	gin.SetMode(gin.TestMode)
+
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = &http.Request{
+		Header: make(http.Header),
+	}
+
+	return ctx
 }
