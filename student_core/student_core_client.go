@@ -13,7 +13,7 @@ type StudentCoreClient struct {
 	DbClient db.DatabaseInterface
 }
 
-func New(dbClient db.DatabaseInterface) *StudentCoreClient {
+func NewStudentCoreClient(dbClient db.DatabaseInterface) *StudentCoreClient {
 	return &StudentCoreClient{
 		DbClient: dbClient,
 	}
@@ -25,24 +25,24 @@ func (s *StudentCoreClient) CreateStudent(context *gin.Context) {
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"message": "Could not parse request data. Check if the request is missing a required field.",
-			"error":   err,
+			"message": "Could not parse request body. Check if the request is missing a required field.",
+			"error":   err.Error(),
 		})
 
 		return
 	}
 
-	student.RollNo = 1
 	student1, err := s.DbClient.Insert(&student)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
+		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Server could not register the student in the database.",
-			"error":   err,
+			"error":   err.Error(),
 		})
+		return
 	}
 
-	context.JSON(http.StatusCreated, gin.H{
+	context.JSON(http.StatusOK, gin.H{
 		"message": "Student was registered on the server.",
 		"student": student1,
 	})
@@ -53,8 +53,8 @@ func (s *StudentCoreClient) DeleteStudent(context *gin.Context) {
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"message": "Could not parse request data. Check if the url is missing some parameter.",
-			"error":   err,
+			"message": "Could not find the end point. Check if the url is missing some parameter.",
+			"error":   err.Error(),
 		})
 
 		return
@@ -63,15 +63,15 @@ func (s *StudentCoreClient) DeleteStudent(context *gin.Context) {
 	err = s.DbClient.DeleteStudentByRollNo(rollNo)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"message": "Could not delte the student.",
-			"error":   err,
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Could not delete the student.",
+			"error":   err.Error(),
 		})
 
 		return
 	}
 
-	context.JSON(http.StatusAccepted, gin.H{
+	context.JSON(http.StatusOK, gin.H{
 		"message": "Student has been deleted.",
 	})
 }
@@ -80,15 +80,18 @@ func (s *StudentCoreClient) GetAllStudents(context *gin.Context) {
 	students, err := s.DbClient.SelectAllStudents()
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
+		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not fetch the student details.",
-			"error":   err,
+			"error":   err.Error(),
 		})
 
 		return
 	}
 
-	context.JSON(http.StatusOK, students)
+	context.JSON(http.StatusOK, gin.H{
+		"message":  "Fetched the students",
+		"students": students,
+	})
 }
 
 func (s *StudentCoreClient) GetStudentByRollNo(context *gin.Context) {
@@ -96,8 +99,8 @@ func (s *StudentCoreClient) GetStudentByRollNo(context *gin.Context) {
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"message": "Could not parse request data. Check if the url is missing some parameter.",
-			"error":   err,
+			"message": "Could not find the end point. Check if the url is missing some parameter.",
+			"error":   err.Error(),
 		})
 
 		return
@@ -106,9 +109,9 @@ func (s *StudentCoreClient) GetStudentByRollNo(context *gin.Context) {
 	student, err := s.DbClient.SelectStudentByRollNo(rollNo)
 
 	if err != nil {
-		context.JSON(http.StatusOK, gin.H{
-			"message": "Internal server error",
-			"student": student,
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Could not fetch the student details.",
+			"error":   err.Error(),
 		})
 	}
 
@@ -123,7 +126,8 @@ func (s *StudentCoreClient) UpdateStudent(context *gin.Context) {
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"message": "Could not parse request data. Check if the url is missing some parameter.",
+			"message": "Could not find the end point. Check if the url is missing some parameter.",
+			"error":   err.Error(),
 		})
 
 		return
@@ -134,7 +138,8 @@ func (s *StudentCoreClient) UpdateStudent(context *gin.Context) {
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"message": "Could not parse request data. Check if the request is missing a required field.",
+			"message": "Could not parse request body. Check if the request is missing a required field.",
+			"error":   err.Error(),
 		})
 
 		return
@@ -144,14 +149,15 @@ func (s *StudentCoreClient) UpdateStudent(context *gin.Context) {
 	student, err := s.DbClient.UpdateStudentByRollNo(&updatedStudent)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
+		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not update the student.",
+			"error":   err.Error(),
 		})
 
 		return
 	}
 
-	context.JSON(http.StatusAccepted, gin.H{
+	context.JSON(http.StatusOK, gin.H{
 		"message": "Student has been updated.",
 		"student": student,
 	})
