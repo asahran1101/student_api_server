@@ -1,21 +1,13 @@
 package main
 
 import (
-	"example.com/api/routes"
+	"example.com/api/server"
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 )
 
 func main() {
-	server := gin.Default()
-
-	server.DELETE("/students/:rollNo", routes.DeleteStudent)
-
-	server.GET("/students", routes.GetStudents)
-	server.GET("/students/:rollNo", routes.GetStudent)
-
-	server.POST("/students", routes.CreateStudent)
-
-	server.PUT("/students/:rollNo", routes.UpdateStudent)
-
-	server.Run(":8080")
+	myServer := gin.Default()
+	server.RegisterRoutes(myServer)
+	myServer.Run(":8080")
 }
