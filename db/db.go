@@ -143,15 +143,15 @@ func (DbClient DatabaseClient) SelectStudentByRollNo(rollNo int) (*models.Studen
 	}
 
 	defer row.Close()
-	var s models.Student
-	s.RollNo = rollNo
-	err = row.Scan(&s.Name, &s.GuardianName, &s.Address, &s.ContactNo, &s.EmailID)
+	var student models.Student
+	student.RollNo = rollNo
+	err = row.Scan(&student.Name, &student.GuardianName, &student.Address, &student.ContactNo, &student.EmailID)
 
 	if err != nil {
 		return nil, fmt.Errorf("Could not fetch the student details due to internal server error. %v", err)
 	}
 
-	return &s, nil
+	return &student, nil
 }
 
 func (DbClient DatabaseClient) UpdateStudentByRollNo(s *models.Student) (*models.Student, error) {
