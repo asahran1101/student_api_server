@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"example.com/api/db"
-	"example.com/api/models"
+	"github.com/asahran1101/student_api_server/services/db"
+	"github.com/asahran1101/student_api_server/services/models"
 	"github.com/gin-gonic/gin"
 )
 

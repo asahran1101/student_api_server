@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"testing"
 
-	"example.com/api/db"
-	"example.com/api/models"
+	"github.com/asahran1101/student_api_server/services/db"
+	"github.com/asahran1101/student_api_server/services/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"

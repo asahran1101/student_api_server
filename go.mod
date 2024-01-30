@@ -1,4 +1,4 @@
-module example.com/api
+module github.com/asahran1101/student_api_server
 
 go 1.21.6
 

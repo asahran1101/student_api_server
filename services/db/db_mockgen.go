@@ -7,7 +7,7 @@ package db
 import (
 	reflect "reflect"
 
-	models "example.com/api/models"
+	models "github.com/asahran1101/student_api_server/services/models"
 	gomock "github.com/golang/mock/gomock"
 )
 

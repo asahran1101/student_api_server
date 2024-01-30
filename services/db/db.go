@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"sync"
 
-	"example.com/api/constants"
-	"example.com/api/models"
+	"github.com/asahran1101/student_api_server/constants"
+	"github.com/asahran1101/student_api_server/services/models"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )

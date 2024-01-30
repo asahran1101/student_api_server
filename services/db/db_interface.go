@@ -1,6 +1,6 @@
 package db
 
-import "example.com/api/models"
+import "github.com/asahran1101/student_api_server/services/models"
 
 type DatabaseInterface interface {
 	Insert(s *models.Student) (*models.Student, error)

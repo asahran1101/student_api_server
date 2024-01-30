@@ -1,9 +1,9 @@
 package server
 
 import (
-	"example.com/api/constants"
-	"example.com/api/db"
-	"example.com/api/student_core"
+	"github.com/asahran1101/student_api_server/constants"
+	"github.com/asahran1101/student_api_server/services/db"
+	"github.com/asahran1101/student_api_server/services/student_core"
 	"github.com/gin-gonic/gin"
 )
 
