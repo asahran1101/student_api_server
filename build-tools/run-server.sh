@@ -1,5 +1,12 @@
 cd $(dirname $0)/..
 
+go get -u github.com/gin-gonic/gin
+go get -u github.com/golang/mock
+go get -u github.com/joho/godotenv
+go get -u github.com/lib/pq
+go get -u github.com/stretchr/testify/assert
+
+
 if [ -f .env ]; then
   source .env
 fi
