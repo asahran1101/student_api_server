@@ -11,13 +11,12 @@ if [ -f .env ]; then
   source .env
 fi
 
-export SQL_FILE="$(dirname $0)/migrations/create_table.sql"
+export SQL_FILE="$(dirname $0)/../migrations/add_student_table.sql"
 
 export PGPASSWORD=$PASSWORD
 
 PSQL_COMMAND="psql -h localhost -p $PORT -d $DB_NAME -U $USER -w -f $SQL_FILE"
 $PSQL_COMMAND
-echo "This is DB_NAME  $PORT"
 if ! $PSQL_COMMAND; then
     echo "Error: Failed to execute SQL file."
     exit 1

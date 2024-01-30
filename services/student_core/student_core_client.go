@@ -113,6 +113,8 @@ func (s *StudentCoreClient) GetStudentByRollNo(context *gin.Context) {
 			"message": "Could not fetch the student details.",
 			"error":   err.Error(),
 		})
+
+		return
 	}
 
 	context.JSON(http.StatusOK, gin.H{
