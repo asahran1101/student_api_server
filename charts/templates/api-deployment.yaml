@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: student-api
+  template:
+    metadata:
+      labels:
+        app: student-api
+    spec:
+      containers:
+      - name: student-api-container
+        image: asahran/student_api_server
+        ports:
+        - containerPort: 8080
+        env:
+        - name: HOST
+          value: postgres-service
+        - name: PORT
+          value: "5432"
+        - name: DB_NAME
+          value: students
+        - name: USER
+          value: postgres
+        - name: PASSWORD
+          value: Aniket@12
+

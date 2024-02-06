@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgres-init-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: postgres-init-container
+        image: asahran/db_initializer:latest
+        command: ["/bin/sh"]
+        args: ["-c", "sh ./build-tools/run-migrations.sh"]
+      restartPolicy: Never
+  backoffLimit: 4

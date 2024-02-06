@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/asahran1101/student_api_server/constants"
+	"github.com/asahran1101/student_api_server/services/constants"
 	"github.com/asahran1101/student_api_server/services/db"
 	"github.com/asahran1101/student_api_server/services/student_core"
 	"github.com/gin-gonic/gin"

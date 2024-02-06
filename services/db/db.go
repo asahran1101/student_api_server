@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/asahran1101/student_api_server/constants"
+	"github.com/asahran1101/student_api_server/services/constants"
 	"github.com/asahran1101/student_api_server/services/models"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -95,10 +95,6 @@ func (DbClient DatabaseClient) SelectAllStudents() ([]models.Student, error) {
 
 	var students = []models.Student{}
 	var student models.Student
-
-	if !rows.Next() {
-		return nil, fmt.Errorf("No students exist in the database.")
-	}
 
 	for rows.Next() {
 		var rollNo int
