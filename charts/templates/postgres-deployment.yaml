@@ -24,3 +24,10 @@ spec:
           value: Aniket@12
         ports:
         - containerPort: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-volume-access
+      volumes:
+      - name: postgres-volume-access
+        persistentVolumeClaim:
+          claimName: postgres-pvc
