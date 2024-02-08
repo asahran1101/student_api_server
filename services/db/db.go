@@ -26,11 +26,11 @@ func New() DatabaseClient {
 		if err != nil {
 			fmt.Println("Error is occurred  on .env file please check")
 		}
-		host := os.Getenv("HOST")
-		port, _ := strconv.Atoi(os.Getenv("PORT"))
+		host := os.Getenv("POSTGRES_HOST")
+		port, _ := strconv.Atoi(os.Getenv("POSTGRES_PORT"))
 		user := "postgres"
-		dbname := os.Getenv("DB_NAME")
-		pass := os.Getenv("PASSWORD")
+		dbname := os.Getenv("POSTGRES_DB")
+		pass := os.Getenv("POSTGRES_PASSWORD")
 
 		psqlSetup := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
 			host, port, user, dbname, pass)

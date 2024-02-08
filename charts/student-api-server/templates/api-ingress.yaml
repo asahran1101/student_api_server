@@ -1,9 +1,8 @@
-# No idea what this is
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: api-ingress
+  namespace: {{ .Values.app }}
 spec:
   rules:
   - host: your-api-host.com

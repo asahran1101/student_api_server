@@ -1,1 +1,2 @@
 .env
+/charts/templates/postgres-secret.yaml

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.backend.name }}-deployment
+  namespace: {{ .Values.app }}
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.backend.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.backend.name }}
+    spec:
+      containers:
+      - name: {{ .Values.backend.name }}-container
+        image: asahran/student_api_server
+        ports:
+        - containerPort: {{ .Values.backend.port }}
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.db.name }}-config
+        - secretRef:
+            name: {{ .Values.db.name }}-secret
+

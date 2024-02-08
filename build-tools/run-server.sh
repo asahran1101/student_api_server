@@ -1,20 +1,9 @@
 cd $(dirname $0)/..
 
-go mod download
+minikube start
 
-if [ -f .env ]; then
-  source .env
-fi
+kubectl delete namespace student
+kubectl delete pv postgres-pv
+helm install student-server ./student-api-server 
 
-export SQL_FILE="$(dirname $0)/../migrations/add_student_table.sql"
-
-export PGPASSWORD=$PASSWORD
-
-PSQL_COMMAND="psql -h localhost -p $PORT -d $DB_NAME -U $USER -w -f $SQL_FILE"
-$PSQL_COMMAND
-if ! $PSQL_COMMAND; then
-    echo "Error: Failed to execute SQL file."
-    exit 1
-fi
-
-go run ./services/main/main.go
+echo "The server is running now."

@@ -1,0 +1,18 @@
+app: student-api-server
+backend:
+  name: student-api
+  port: 8080
+  replicas: 1
+db:
+  host: postgres-service
+  name: postgres
+  persistentVolumes:
+    accessName: postgres-volume-access
+    readPath: /var/lib/postgresql/data
+    storage: 1Gi
+    writePath: "/mnt/data"
+  port: 5432
+  replicas: 1
+  services:
+    nodePort:
+      nodePort: 30002

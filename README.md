@@ -8,41 +8,58 @@ This project implements a backend server in GoLang using Gin package, complete w
 * POST     /students           --> To register a new student in the database.
 * PUT      /students/:rollNo   --> To update the details of a student, using his roll number.
 
-## Setting up PostgreSQL Database
-
-Make sure that PostgreSQL is installed on your machine before running the server. The original code was developed on PostgreSQL14.10. After downloading, run the following command in your terminal. Please note that postgres here is the username, which is given by default. In case you chose a different username during installation, enter that instead.
-
-```terminal
-psql -U postgres
-```
-
-The terminal then asks for your PostgreSQL password, and opens up the PostgreSQL CLI. Here, enter the following commands.
-
-```postgresql cli
-CREATE DATABASE students;
-```
-
 ## Updating the .env File in the Project
 
-Create a .env file in your local project directory and update it with the follwing code. Please note that the port number and username taken here are the ones assigned by default during installation of postgres. If you chose differently, enter those custom parameters accordingly.
+Create a .env file in your local project directory and update it with the following code. Please note that the port number and username taken here are the ones assigned by default during installation of postgres. If you chose differently, enter those custom parameters accordingly.
 
 ```.env
-HOST=localhost
-PORT=5432
-USER=postgres
-DB_NAME=students
-PASSWORD=<Your Password>
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_DB=students
+POSTGRES_PASSWORD=<Your Password>
 ```
+
+## Updating the postgres-secret.yaml File in the Project
+
+Create a postgres-secret.yaml file in ./charts/student-api-server/templates directory of this project directory. Copy the following lines in the file. 
+
+```postgres-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.db.name }}-secret
+  namespace: {{ .Values.app }}
+data:
+  POSTGRES_PASSWORD: <Base-64 encoded database password>
+```
+
+Replace the Base-64 encoded database password in the above file. You can obtain this by running the following command with your password on the terminal.
+
+```terminal
+echo -n '<Your Password>' | base64
+```
+
+Now copy and paste the output of this command in the postgres-secret.yaml file.
 
 ## Running the Server
 
-Run the following command in your project directory terminal to start the server.
+Run the following commands in your project directory terminal to start the server.
 
 ```terminal
-./build-tools/run-server.sh
-```
+minikube start
 
-The server is now running on port 8080. You can send in API requests to this server and get a response. 
+kubectl delete namespace student-api-server
+kubectl delete pv postgres-pv
+helm install student-server ./charts/student-api-server 
+kubectl get pods --namespace=student-api-server
+```
+You will get a list of all the running pods on your machine after this. Copy the pods name which starts with student-api-deployment. The run the following command in your terminal.
+
+```terminal
+kubectl port-forward <pod-name> --namespace=student-api-server 9292:8080
+```
+The server is now running on port 9292 on your local machine. You can send in API requests to this server and get a response. 
 
 ## Unit Testing for the server
 
@@ -55,7 +72,7 @@ go test
 
 ## Sending Requests
 
-You can send API requests to this server through VS Extensions like REST client or Postman. Please note that the server is running on localhost:8080.
+You can send API requests to this server through VS Extensions like REST client or Postman. Please note that the server is running on localhost:9292.
 
 ## Shutting Down the Server
 

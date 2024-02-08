@@ -3,9 +3,9 @@ if [ -f .env ]; then
 fi
 
 export SQL_FILE="$(dirname $0)/../migrations/add_student_table.sql"
-PSQL_COMMAND="psql -h postgres-service -d $DB_NAME -U $USER -w -f $SQL_FILE"
+PSQL_COMMAND="psql -h postgres-service -d $POSTGRES_DB -U $POSTGRES_USER -w -f $SQL_FILE"
 
-export PGPASSWORD=$PASSWORD
+export PGPASSWORD=$POSTGRES_PASSWORD
 $PSQL_COMMAND
 
 if ! $PSQL_COMMAND; then
