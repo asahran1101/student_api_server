@@ -57,7 +57,7 @@ kubectl get pods --namespace=student-api-server
 You will get a list of all the running pods on your machine after this. Copy the pods name which starts with student-api-deployment. The run the following command in your terminal.
 
 ```terminal
-kubectl port-forward <pod-name> --namespace=student-api-server 9292:8080
+kubectl port-forward <pod-name> --namespace=student-api-server 9922:8080
 ```
 The server is now running on port 9292 on your local machine. You can send in API requests to this server and get a response. 
 
@@ -72,7 +72,7 @@ go test
 
 ## Sending Requests
 
-You can send API requests to this server through VS Extensions like REST client or Postman. Please note that the server is running on localhost:9292.
+You can send API requests to this server through VS Extensions like REST client or Postman. Please note that the server is running on localhost:9922.
 
 ## Shutting Down the Server
 
