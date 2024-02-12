@@ -8,7 +8,9 @@ This project implements a backend server in GoLang using Gin package, complete w
 * POST     /students           --> To register a new student in the database.
 * PUT      /students/:rollNo   --> To update the details of a student, using his roll number.
 
-## Updating the .env File in the Project
+## Setting up the Server and Deploying it 
+
+### Updating the .env File in the Project
 
 Create a .env file in your local project directory and update it with the following code. Please note that the port number and username taken here are the ones assigned by default during installation of postgres. If you chose differently, enter those custom parameters accordingly.
 
@@ -20,7 +22,7 @@ POSTGRES_DB=students
 POSTGRES_PASSWORD=<Your Password>
 ```
 
-## Updating the postgres-secret.yaml File in the Project
+### Updating the postgres-secret.yaml File in the Project
 
 Create a postgres-secret.yaml file in ./charts/student-api-server/templates directory of this project directory. Copy the following lines in the file. 
 
@@ -42,7 +44,7 @@ echo -n '<Your Password>' | base64
 
 Now copy and paste the output of this command in the postgres-secret.yaml file.
 
-## Running the Server
+### Running the Server
 
 Run the following commands in your project directory terminal to start the server.
 
@@ -61,19 +63,19 @@ kubectl port-forward <pod-name> --namespace=student-api-server 9922:8080
 ```
 The server is now running on port 9292 on your local machine. You can send in API requests to this server and get a response. 
 
-## Unit Testing for the server
+<!-- ### Unit Testing for the server
 
 This server can further be tested by running the following commands in your project directory terminal.
 
 ```terminal
 cd ./student_core
 go test
-```
+``` -->
 
-## Sending Requests
+### Sending Requests
 
 You can send API requests to this server through VS Extensions like REST client or Postman. Please note that the server is running on localhost:9922.
 
-## Shutting Down the Server
+### Shutting Down the Server
 
 The server can be shut down by going into the terminal window where the server is running and pressing Control + C on your keyboard.
