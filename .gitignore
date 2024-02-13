@@ -1,2 +1,2 @@
 .env
-/charts/templates/-secret.yaml
+/charts/templates/db-secret.yaml
