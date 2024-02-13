@@ -1,2 +1,2 @@
 .env
-/charts/templates/postgres-secret.yaml
+/charts/templates/db-secret.yaml
