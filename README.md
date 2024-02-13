@@ -14,7 +14,7 @@ This project implements a backend server in GoLang using Gin package, complete w
 
 Create a .env file in your local project directory and update it with the following code. Please note that the port number and username taken here are the ones assigned by default during installation of postgres. If you chose differently, enter those custom parameters accordingly.
 
-```.env
+```env
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USER=postgres
@@ -22,11 +22,11 @@ POSTGRES_DB=students
 POSTGRES_PASSWORD=<Your Password>
 ```
 
-### Updating the postgres-secret.yaml File in the Project
+### Updating the db-secret.yaml File in the Project
 
 Create a postgres-secret.yaml file in ./charts/student-api-server/templates directory of this project directory. Copy the following lines in the file. 
 
-```postgres-secret.yaml
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -48,7 +48,7 @@ Now copy and paste the output of this command in the postgres-secret.yaml file.
 
 Run the following commands in your project directory terminal to start the server.
 
-```terminal
+```bash
 minikube start
 
 kubectl delete namespace student-api-server
@@ -58,7 +58,7 @@ kubectl get pods --namespace=student-api-server
 ```
 You will get a list of all the running pods on your machine after this. Copy the pods name which starts with student-api-deployment. The run the following command in your terminal.
 
-```terminal
+```bash
 kubectl port-forward <pod-name> --namespace=student-api-server 9922:8080
 ```
 The server is now running on port 9292 on your local machine. You can send in API requests to this server and get a response. 
